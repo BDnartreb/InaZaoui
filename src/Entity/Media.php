@@ -15,9 +15,6 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "medias", fetch: "EAGER")]
-    private ?User $user = null;
-
     //#[ORM\ManyToOne(targetEntity: Album::class, fetch: "EAGER", orphanRemoval: true)]
     #[ORM\ManyToOne(targetEntity: Album::class, fetch: "EAGER")]
     private ?Album $album = null;
@@ -36,19 +33,13 @@ class Media
     )]
     private ?UploadedFile $file = null;
 
+    #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
     }
 
     public function getPath(): string
@@ -89,5 +80,17 @@ class Media
     public function setAlbum(?Album $album): void
     {
         $this->album = $album;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

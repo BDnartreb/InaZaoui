@@ -33,7 +33,8 @@ class HomeController extends AbstractController
     public function guests()
     {
         //$guests = $this->getDoctrine()->getRepository(User::class)->findBy(['admin' => false]);
-        $guests = $this->em->getRepository(User::class)->findBy(['admin' => false]);
+        //$guests = $this->em->getRepository(User::class)->findBy(['admin' => false]);
+        $guests = $this->getUser();
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -46,7 +47,8 @@ class HomeController extends AbstractController
     public function guest(int $id)
     {
         //$guest = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $guest = $this->em->getRepository(User::class)->find($id);
+        //$guest = $this->em->getRepository(User::class)->find($id);
+        $guest = $this->getUser();
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
         ]);
@@ -63,12 +65,15 @@ class HomeController extends AbstractController
         // $user = $this->getDoctrine()->getRepository(User::class)->findOneByAdmin(true);
         $albums = $this->em->getRepository(Album::class)->findAll();
         $album = $id ? $this->em->getRepository(Album::class)->find($id) : null;
-        $user = $this->em->getRepository(User::class)->findOneByAdmin(true);
+        //$user = $this->em->getRepository(User::class)->findOneByAdmin(true);
+        //$user = $this->em->getRepository(User::class)->findOneById(true);
+        $user = $this->getUser();
         $medias = $album
             // ? $this->getDoctrine()->getRepository(Media::class)->findByAlbum($album)
             // : $this->getDoctrine()->getRepository(Media::class)->findByUser($user);
             ? $this->em->getRepository(Media::class)->findByAlbum($album)
             : $this->em->getRepository(Media::class)->findByUser($user);
+          //: $this->em->getRepository(Media::class)->findOneBy(['id' => $user]);
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
             'album' => $album,
