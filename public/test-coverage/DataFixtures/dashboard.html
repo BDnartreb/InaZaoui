@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for C:\xampp\htdocs\tests\Projet15\InaZaoui\src\Repository</title>
+  <title>Dashboard for C:\xampp\htdocs\tests\Projet15\InaZaoui\src\DataFixtures</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../_css/bootstrap.min.css?v=9.2.31" rel="stylesheet" type="text/css">
   <link href="../_css/nv.d3.min.css?v=9.2.31" rel="stylesheet" type="text/css">
@@ -17,7 +17,7 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../index.html">C:\xampp\htdocs\tests\Projet15\InaZaoui\src</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Repository</a></li>
+         <li class="breadcrumb-item"><a href="index.html">DataFixtures</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -58,8 +58,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="MediaRepository.php.html#17">App\Repository\MediaRepository</a></td><td class="text-right">14%</td></tr>
-       <tr><td><a href="UserRepository.php.html#15">App\Repository\UserRepository</a></td><td class="text-right">16%</td></tr>
+       <tr><td><a href="AppFixtures.php.html#10">App\DataFixtures\AppFixtures</a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -76,7 +75,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="UserRepository.php.html#15">App\Repository\UserRepository</a></td><td class="text-right">8</td></tr>
 
        </tbody>
       </table>
@@ -114,8 +112,8 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="MediaRepository.php.html#24"><abbr title="App\Repository\MediaRepository::findByUser">findByUser</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="UserRepository.php.html#25"><abbr title="App\Repository\UserRepository::upgradePassword">upgradePassword</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AppFixtures.php.html#15"><abbr title="App\DataFixtures\AppFixtures::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="AppFixtures.php.html#20"><abbr title="App\DataFixtures\AppFixtures::load">load</abbr></a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -132,7 +130,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="UserRepository.php.html#25"><abbr title="App\Repository\UserRepository::upgradePassword">upgradePassword</abbr></a></td><td class="text-right">6</td></tr>
 
        </tbody>
       </table>
@@ -161,7 +158,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,2,0,0,0,0,0,0,0,0,1], "Class Coverage"))
+      .datum(getCoverageDistributionData([1,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -179,7 +176,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([2,0,0,0,0,0,0,0,0,0,0,3], "Method Coverage"))
+      .datum(getCoverageDistributionData([2,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -229,7 +226,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"AlbumRepository.php.html#17\">App\\Repository\\AlbumRepository<\/a>"],[14.285714285714285,2,"<a href=\"MediaRepository.php.html#17\">App\\Repository\\MediaRepository<\/a>"],[16.666666666666664,3,"<a href=\"UserRepository.php.html#15\">App\\Repository\\UserRepository<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[0,2,"<a href=\"AppFixtures.php.html#10\">App\\DataFixtures\\AppFixtures<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -253,7 +250,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"AlbumRepository.php.html#19\">App\\Repository\\AlbumRepository::__construct<\/a>"],[100,1,"<a href=\"MediaRepository.php.html#19\">App\\Repository\\MediaRepository::__construct<\/a>"],[0,1,"<a href=\"MediaRepository.php.html#24\">App\\Repository\\MediaRepository::findByUser<\/a>"],[100,1,"<a href=\"UserRepository.php.html#17\">App\\Repository\\UserRepository::__construct<\/a>"],[0,2,"<a href=\"UserRepository.php.html#25\">App\\Repository\\UserRepository::upgradePassword<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[0,1,"<a href=\"AppFixtures.php.html#15\">App\\DataFixtures\\AppFixtures::__construct<\/a>"],[0,1,"<a href=\"AppFixtures.php.html#20\">App\\DataFixtures\\AppFixtures::load<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);

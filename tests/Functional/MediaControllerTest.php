@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\Unit;
+namespace App\Tests\Functional;
 
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class MediaTest extends TestCase
+class MediaTest extends WebTestCase
 {
-    public function testAddOfANewMedia(): void
+    public function testUploadMedia(): void
     {
         // Given : /admin/media/add
         // When : Fill the form and clic on add button
@@ -15,7 +15,7 @@ class MediaTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testDeleteOfANewMedia(): void
+    public function testDeleteMedia(): void
     {
         // Given : /admin/media/delete/{id} of the album or /admin/media
         // When : Push Enter button or Clic on delete button
@@ -23,4 +23,13 @@ class MediaTest extends TestCase
         // And : Display /admin/media without the removed media
         $this->assertTrue(true);
     }
+
+    // public function testAddMediaViaPostRequest(){
+    //}
+
+    // public function testUpdateMediaViaPushRequest(){
+    //}
+
+    // public function testDeleteMediaViaDeleteRequest(){
+    //}
 }

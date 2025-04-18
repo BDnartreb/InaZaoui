@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Guest;
 
 use App\Entity\Media;
+use App\Form\GuestMediaType;
 use App\Form\MediaType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class MediaController extends AbstractController
+final class GuestMediaController extends AbstractController
 {
     protected $em;
 
@@ -17,17 +20,15 @@ class MediaController extends AbstractController
     {
         $this->em = $em;
     }
-    
-    #[Route('/admin/media', name: 'admin_media_index')]
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/guest/media', name: 'guest_media_index')]
     public function index(Request $request)
     {
         $page = $request->query->getInt('page', 1);
 
         $criteria = [];
-
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            $criteria['user'] = $this->getUser();
-        }
+        $criteria['user'] = $this->getUser();
 
         $medias = $this->em->getRepository(Media::class)->findBy(
             $criteria,
@@ -45,29 +46,28 @@ class MediaController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/media/add', name: 'admin_media_add')]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/guest/media/add', name: 'guest_media_add')]
     public function add(Request $request)
     {
         $media = new Media();
+        $media->setUser($this->getUser());
         //$form = $this->createForm(MediaType::class, $media, ['roles' => $this->isGranted('ROLE_ADMIN')]);
-        $form = $this->createForm(MediaType::class, $media);
+        $form = $this->createForm(GuestMediaType::class, $media);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$this->isGranted('ROLE_ADMIN')) {
-                $media->setUser($this->getUser());
-            }
             $media->setPath('uploads/' . md5(uniqid()) . '.' . $media->getFile()->guessExtension());
             $media->getFile()->move('uploads/', $media->getPath());
             $this->em->persist($media);
             $this->em->flush();
-            return $this->redirectToRoute('admin_media_index');
+            return $this->redirectToRoute('guest_media_index');
         }
 
-        return $this->render('admin/media/add.html.twig', ['form' => $form->createView()]);
+        return $this->render('guest_media/add.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
+    #[Route('/guest/media/delete/{id}', name: 'guest_media_delete')]
     public function delete(int $id)
     {
         $media = $this->em->getRepository(Media::class)->find($id);
@@ -75,6 +75,6 @@ class MediaController extends AbstractController
         $this->em->flush();
         unlink($media->getPath());
 
-        return $this->redirectToRoute('admin_media_index');
+        return $this->redirectToRoute('guest_media_index');
     }
 }

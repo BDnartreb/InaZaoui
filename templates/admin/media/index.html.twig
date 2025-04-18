@@ -1,9 +1,17 @@
 {% extends 'admin.html.twig' %}
 
+{% set media_add_route = is_granted('ROLE_ADMIN') 
+    ? 'admin_media_add' 
+    : (is_granted('ROLE_USER') ? 'guest_media_add' : null) %}
+
+{% set media_delete_route = is_granted('ROLE_ADMIN') 
+    ? 'admin_media_delete' 
+    : (is_granted('ROLE_USER') ? 'guest_media_delete' : null) %}
+
 {% block admin %}
     <div class="d-flex justify-content-between align-items-center">
         <h1>Medias</h1>
-        <a href="{{ path('admin_media_add') }}" class="btn btn-primary">Ajouter</a>
+        <a href="{{ path(media_add_route) }}" class="btn btn-primary">Ajouter</a>
     </div>
     <table class="table">
         <thead>
@@ -23,11 +31,11 @@
                     <td><img src="{{ asset(media.path) }}" width="75" /></td>
                     <td>{{ media.title }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
-                        <td>{{ media.user.name }}</td>
+                        <td>{{ media.user.lastName }}</td>
                         <td>{{ media.album.name ?? '' }}</td>
                     {% endif %}
                     <td>
-                        <a href="{{ path('admin_media_delete', {id: media.id}) }}" class="btn btn-danger">Supprimer</a>
+                        <a href="{{ path(media_delete_route, {id: media.id}) }}" class="btn btn-danger">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}

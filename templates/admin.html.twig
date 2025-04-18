@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% set media_index_route = is_granted('ROLE_ADMIN') 
+    ? 'admin_media_index' 
+    : (is_granted('ROLE_USER') ? 'guest_media_index' : null) %}
+
 {% block body %}
     <div class="container-fluid">
         <div class="row">
@@ -8,7 +12,7 @@
                     <h1 class="text-white">Admin</h1>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_media_index') }}">
+                            <a class="nav-link" href="{{ path(media_index_route) }}">
                                 Medias
                             </a>
                         </li>
@@ -19,7 +23,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">
+                                <a class="nav-link" href="{{ path('admin_guests_index') }}">
                                     Invités
                                 </a>
                             </li>
