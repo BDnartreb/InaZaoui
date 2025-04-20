@@ -14,16 +14,6 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            //if($this->isGranted('ROLE_USER')){
-            // $roles = $this->getUser()->getRoles();
-            // if (empty($roles[0])) {
-            //     throw new AccessDeniedHttpException("Vous n\êtes plus autorisé à vous connecter à ce site.");
-                    
-            // } else {
-            //     //dd("coucou else");
-            //     return $this->redirectToRoute('home');
-            // }
-
             return $this->redirectToRoute('home');
         }
 

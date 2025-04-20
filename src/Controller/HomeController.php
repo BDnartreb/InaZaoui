@@ -34,8 +34,6 @@ class HomeController extends AbstractController
             return !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_FROZEN', $roles);
         });
 
-
-
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);

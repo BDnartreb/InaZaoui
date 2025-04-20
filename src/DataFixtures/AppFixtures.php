@@ -42,13 +42,13 @@ class AppFixtures extends Fixture
         $manager->persist($userDeleteMedias);
 
         // user with medias but no ROLE_USER
-        $userNoRole = new User();
-        $userNoRole->setEmail('usernorole@zaoui.com');
-        $userNoRole->setFirstName('usernorole');
-        $userNoRole->setLastName('UserNoRole');
-        $userNoRole->setRoles(['']);
-        $userNoRole->setPassword($this->userPasswordHasher->hashPassword($admin, 'password'));
-        $manager->persist($userNoRole);
+        $userFrozen = new User();
+        $userFrozen->setEmail('userfrozen@zaoui.com');
+        $userFrozen->setFirstName('userFrozen');
+        $userFrozen->setLastName('UserFrozen');
+        $userFrozen->setRoles(['ROLE_FROZEN']);
+        $userFrozen->setPassword($this->userPasswordHasher->hashPassword($admin, 'password'));
+        $manager->persist($userFrozen);
 
         // standard users 
         for ($i = 0; $i<20; $i++){
@@ -83,13 +83,13 @@ class AppFixtures extends Fixture
             $manager->persist($media);
         }
 
-        // medias of userNoRole
+        // medias of userFrozen
         for ($i=10; $i<20; $i++){
             $media = new Media();
-            $media->setUser($userNoRole);
+            $media->setUser($userFrozen);
             $media->setAlbum($albums[random_int(0, 4)]);
             $media->setPath(sprintf('uploads/00' . $i . '.jpg'));
-            $media->setTitle(sprintf('Titre userNoRole ' . $i));
+            $media->setTitle(sprintf('Titre userFrozen ' . $i));
             $manager->persist($media);
         }
 

@@ -3,13 +3,14 @@
 namespace App\Tests\Functional;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomeControllerTest extends WebTestCase
 {
-
     private $client;
+
+    private EntityManagerInterface $em;
 
     public function setUp(): void
     {
@@ -34,38 +35,37 @@ class HomeControllerTest extends WebTestCase
      * 
      * @dataProvider provideOneGuest
      */
-    
-    public function testShouldDisplayOneGuestPage($guestId, $guestName): void
+    public function testShouldDisplayOneGuestPage($guestEmail, $guestLastName): void
     {
+        $container = static::getContainer();
+        $this->em = $container->get('doctrine')->getManager();
+        $guestId = $this->em->getRepository(User::class)->findOneBy(['email' => $guestEmail])->getId();
         $crawler = $this->client->request('GET', '/guest/' . $guestId);
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h3', $guestName);
+        $this->assertSelectorTextContains('h3', $guestLastName);
     }
 
     public static function provideOneGuest()
     {
         return [
-            [1, "Ina"],
+            ["userfrozen@zaoui.com", "UserFrozen"],
         ];
     }
 
-    /**
-    * 
-    * @dataProvider provideAlbum
-    */
-    public function testShouldDisplayPortfolioPage($albumId, $albumName): void
+    public function testShouldDisplayPortfolioPage(): void
     {
-        $crawler = $this->client->request('GET', '/portfolio/' . $albumId);
+        $crawler = $this->client->request('GET', '/portfolio');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h3', "Portfolio");
     }
 
-    public static function provideAlbum()
+    public function testShouldDisplayPortfolioAlbum1(): void
     {
-        return [
-            [1, "Album 1"],
-        ];
+        $crawler = $this->client->request('GET', '/portfolio/1');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h3', "Portfolio");
     }
+
 
     public function testShouldDisplayAboutPage(): void
     {
