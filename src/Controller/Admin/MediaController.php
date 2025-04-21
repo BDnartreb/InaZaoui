@@ -71,10 +71,15 @@ class MediaController extends AbstractController
     public function delete(int $id)
     {
         $media = $this->em->getRepository(Media::class)->find($id);
-        $this->em->remove($media);
-        $this->em->flush();
-        unlink($media->getPath());
-
+        if ($media) {
+            $filePath = $media->getPath();
+            $this->em->remove($media);
+            $this->em->flush();
+        
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
         return $this->redirectToRoute('admin_media_index');
     }
 }

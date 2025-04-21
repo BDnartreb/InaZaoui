@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for C:\xampp\htdocs\tests\Projet15\InaZaoui\src\Controller\Admin</title>
+  <title>Dashboard for C:\xampp\htdocs\tests\Projet15\InaZaoui\src\Controller\Guest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../../_css/bootstrap.min.css?v=9.2.31" rel="stylesheet" type="text/css">
   <link href="../../_css/nv.d3.min.css?v=9.2.31" rel="stylesheet" type="text/css">
@@ -18,7 +18,7 @@
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../../index.html">C:\xampp\htdocs\tests\Projet15\InaZaoui\src</a></li>
          <li class="breadcrumb-item"><a href="../index.html">Controller</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Admin</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Guest</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -59,7 +59,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="MediaController.php.html#12">App\Controller\Admin\MediaController</a></td><td class="text-right">43%</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#17">App\Controller\Guest\GuestMediaController</a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -76,7 +76,7 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="MediaController.php.html#12">App\Controller\Admin\MediaController</a></td><td class="text-right">28</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#17">App\Controller\Guest\GuestMediaController</a></td><td class="text-right">90</td></tr>
 
        </tbody>
       </table>
@@ -114,9 +114,10 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="MediaController.php.html#48"><abbr title="App\Controller\Admin\MediaController::add">add</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="MediaController.php.html#70"><abbr title="App\Controller\Admin\MediaController::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="AlbumController.php.html#60"><abbr title="App\Controller\Admin\AlbumController::delete">delete</abbr></a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#21"><abbr title="App\Controller\Guest\GuestMediaController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#26"><abbr title="App\Controller\Guest\GuestMediaController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#51"><abbr title="App\Controller\Guest\GuestMediaController::add">add</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#72"><abbr title="App\Controller\Guest\GuestMediaController::delete">delete</abbr></a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -133,9 +134,8 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="MediaController.php.html#48"><abbr title="App\Controller\Admin\MediaController::add">add</abbr></a></td><td class="text-right">20</td></tr>
-       <tr><td><a href="MediaController.php.html#70"><abbr title="App\Controller\Admin\MediaController::delete">delete</abbr></a></td><td class="text-right">12</td></tr>
-       <tr><td><a href="AlbumController.php.html#60"><abbr title="App\Controller\Admin\AlbumController::delete">delete</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#72"><abbr title="App\Controller\Guest\GuestMediaController::delete">delete</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="GuestMediaController.php.html#51"><abbr title="App\Controller\Guest\GuestMediaController::add">add</abbr></a></td><td class="text-right">12</td></tr>
 
        </tbody>
       </table>
@@ -164,7 +164,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,1,0,0,0,0,1,1], "Class Coverage"))
+      .datum(getCoverageDistributionData([1,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -182,7 +182,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([2,0,0,0,0,0,0,0,1,0,1,10], "Method Coverage"))
+      .datum(getCoverageDistributionData([4,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -232,7 +232,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[92.3076923076923,10,"<a href=\"AlbumController.php.html#13\">App\\Controller\\Admin\\AlbumController<\/a>"],[100,10,"<a href=\"GuestController.php.html#14\">App\\Controller\\Admin\\GuestController<\/a>"],[43.24324324324324,10,"<a href=\"MediaController.php.html#12\">App\\Controller\\Admin\\MediaController<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[0,9,"<a href=\"GuestMediaController.php.html#17\">App\\Controller\\Guest\\GuestMediaController<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -256,7 +256,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"AlbumController.php.html#16\">App\\Controller\\Admin\\AlbumController::__construct<\/a>"],[100,1,"<a href=\"AlbumController.php.html#21\">App\\Controller\\Admin\\AlbumController::index<\/a>"],[100,3,"<a href=\"AlbumController.php.html#28\">App\\Controller\\Admin\\AlbumController::add<\/a>"],[100,3,"<a href=\"AlbumController.php.html#45\">App\\Controller\\Admin\\AlbumController::update<\/a>"],[75,2,"<a href=\"AlbumController.php.html#60\">App\\Controller\\Admin\\AlbumController::delete<\/a>"],[100,1,"<a href=\"GuestController.php.html#19\">App\\Controller\\Admin\\GuestController::__construct<\/a>"],[100,1,"<a href=\"GuestController.php.html#28\">App\\Controller\\Admin\\GuestController::index<\/a>"],[100,3,"<a href=\"GuestController.php.html#38\">App\\Controller\\Admin\\GuestController::add<\/a>"],[100,4,"<a href=\"GuestController.php.html#55\">App\\Controller\\Admin\\GuestController::update<\/a>"],[100,1,"<a href=\"GuestController.php.html#79\">App\\Controller\\Admin\\GuestController::delete<\/a>"],[100,1,"<a href=\"MediaController.php.html#16\">App\\Controller\\Admin\\MediaController::__construct<\/a>"],[93.75,2,"<a href=\"MediaController.php.html#21\">App\\Controller\\Admin\\MediaController::index<\/a>"],[0,4,"<a href=\"MediaController.php.html#48\">App\\Controller\\Admin\\MediaController::add<\/a>"],[0,3,"<a href=\"MediaController.php.html#70\">App\\Controller\\Admin\\MediaController::delete<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[0,1,"<a href=\"GuestMediaController.php.html#21\">App\\Controller\\Guest\\GuestMediaController::__construct<\/a>"],[0,1,"<a href=\"GuestMediaController.php.html#26\">App\\Controller\\Guest\\GuestMediaController::index<\/a>"],[0,3,"<a href=\"GuestMediaController.php.html#51\">App\\Controller\\Guest\\GuestMediaController::add<\/a>"],[0,4,"<a href=\"GuestMediaController.php.html#72\">App\\Controller\\Guest\\GuestMediaController::delete<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);

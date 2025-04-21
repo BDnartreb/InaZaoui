@@ -47,7 +47,7 @@ final class GuestController extends AbstractController
             $guest->setPassword($this->userPasswordHasher->hashPassword($guest, 'password'));
             $this->em->persist($guest);
             $this->em->flush();
-            return $this->redirectToRoute('guests');
+            return $this->redirectToRoute('admin_guests_index');
         }
         return $this->render('admin/guest/add.html.twig', ['form' => $form->createView()]);
     }
@@ -84,7 +84,7 @@ final class GuestController extends AbstractController
         $this->em->flush();
         //unlink($guest->getPath());
 
-        return $this->redirectToRoute('guests');
+        return $this->redirectToRoute('admin_guests_index');
     }
 
 

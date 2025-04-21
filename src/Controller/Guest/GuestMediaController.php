@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use function PHPUnit\Framework\throwException;
+
 final class GuestMediaController extends AbstractController
 {
     protected $em;
@@ -71,9 +73,18 @@ final class GuestMediaController extends AbstractController
     public function delete(int $id)
     {
         $media = $this->em->getRepository(Media::class)->find($id);
-        $this->em->remove($media);
-        $this->em->flush();
-        unlink($media->getPath());
+        $user = $media->getUser();
+
+        if ($media && $user = $this->getUser()){
+            $filePath = $media->getPath();
+            $this->em->remove($media);
+            $this->em->flush();
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        } else {
+            
+        }
 
         return $this->redirectToRoute('guest_media_index');
     }

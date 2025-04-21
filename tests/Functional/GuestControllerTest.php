@@ -12,76 +12,91 @@ final class GuestControllerTest extends WebTestCase
     private EntityManagerInterface $em;
     private KernelBrowser $client;
 
+    private $newGuestEmail = "newguest@zaoui.com";
+    private $modifiedGuestFirstName = "modifiedFirstName";
+
     public function setUp(): void
     {
         $this->client = static::createClient();
         $container = $this->client->getContainer();
         $this->em = $container->get('doctrine')->getManager();
+        $admin = $this->em->getRepository(User::class)->findOneBy(['email' => 'ina@zaoui.com']);
+        $this->client->loginUser($admin);
     }
 
     public function testAddGuest(): void
     {
-        $admin = $this->em->getRepository(User::class)->findOneBy(['email' => 'ina@zaoui.com']);
-        $this->client->loginUser($admin);
-
         $crawler = $this->client->request('GET', '/admin/guest/add');
         $this->assertResponseIsSuccessful();
-        //dd($crawler);
-
-        $newGuestEmail = "newguest@zaoui.com";
+        
         $form = $crawler->selectButton('Ajouter')->form([
-            'user[email]' => $newGuestEmail,
+            'user[email]' => $this->newGuestEmail,
             'user[firstname]' => 'newguestFirstName',
             'user[lastname]' => 'newguestLastName',
             'user[description]' => 'newguestDescription',
         ]);
         $this->client->submit($form);
 
-        $newGuest = $this->em->getRepository(User::class)->findOneBy(['email' => $newGuestEmail]);
+        $newGuest = $this->em->getRepository(User::class)->findOneBy(['email' => $this->newGuestEmail]);
         $this->assertNotNull($newGuest);
-        $this->assertEquals($newGuestEmail, $newGuest->getEmail());
-        $this->assertTrue($this->client->getResponse()->isRedirection());
-        // $location = $this->client->getResponse()->headers->get('Location');
-        // dump($location); // ou echo $location;
-                // $this->assertResponseRedirects('/guests');
-        // $this->client->followRedirect();
+        $this->assertEquals($this->newGuestEmail, $newGuest->getEmail());
+        //$this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->assertResponseRedirects('/admin/guests');
+        $this->client->followRedirect();
     }
 
-  
+    public function testUpdateGuest(): void
+    {
+        $newGuest = $this->em->getRepository(User::class)->findOneBy(['email' => $this->newGuestEmail]);
+        $guestId = $newGuest->getId();
+        $crawler = $this->client->request('GET', '/admin/guest/update/' . $guestId);
+        $this->assertResponseIsSuccessful();
 
-    // public function testUpdateGuest(): void
-    // {
-    //     $client = static::createClient();
-    //     $client->request('GET', '/guest');
+        $form = $crawler->selectButton('Modifier')->form([
+            'user_update[firstName]' => $this->modifiedGuestFirstName,
+            'user_update[password]' => 'password',
+            'user_update[email]' => $newGuest->getEmail(),
+            'user_update[roles]' => $newGuest->getRoles(),
+            'user_update[lastName]' => $newGuest->getLastName(),
 
-    //     self::assertResponseIsSuccessful();
-    // }
+        ]);
+        $this->client->submit($form);
+        $updatedGuest = $this->em->getRepository(User::class)->find($guestId);
+        $this->assertEquals($this->modifiedGuestFirstName, $updatedGuest->getFirstName());
 
-    // public function testDeleteGuest(): void
-    // {
-    //     // check medias are deleted too
-    //     $client = static::createClient();
-    //     $client->request('GET', '/guest');
+        $this->assertResponseRedirects('/admin/guests');
+        $this->client->followRedirect();
+    }
 
-    //     self::assertResponseIsSuccessful();
-    // }
+    public function testDeleteGuest(): void
+    {
+        $newGuest = $this->em->getRepository(User::class)->findOneBy(['email' => $this->newGuestEmail]);
+        $guestId = $newGuest->getId();
+        $crawler = $this->client->request('GET', '/admin/guest/delete/' . $guestId);
 
-    // public function testAddGuestViaPostRequest(){
-    //}
+        $deletedGuest = $this->em->getRepository(User::class)->find($guestId);
+        $this->assertEquals($deletedGuest, null);
 
-    // public function testUpdateGuestViaPushRequest(){
-    //}
+        $this->assertResponseRedirects('/admin/guests');
+        $this->client->followRedirect();
+    }
 
-    // public function testDeleteGuestViaDeleteRequest(){
-    //}
+//     public function testDeletingUserAlsoDeletesMedias(): void
+// {
+//     $repo = $this->em->getRepository(User::class);
+//     $user = $repo->findOneBy(['email' => 'userdeletemedias@zaoui.com']);
 
+//     $mediaRepo = $this->em->getRepository(Media::class);
+//     $mediaCountBefore = $mediaRepo->count(['user' => $user]);
 
-    // public function testShouldDisplayOneGuestPage($guestEmail, $guestLastName): void
-    // {
-    //     $guestId = $this->em->getRepository(User::class)->findOneBy(['email' => $guestEmail])->getId();
-    //     $crawler = $this->client->request('GET', '/guest/' . $guestId);
-    //     $this->assertResponseIsSuccessful();
-    //     $this->assertSelectorTextContains('h3', $guestLastName);
-    // }
+//     $this->assertGreaterThan(0, $mediaCountBefore);
+
+//     $this->em->remove($user);
+//     $this->em->flush();
+
+//     $mediaCountAfter = $mediaRepo->count(['user' => $user]);
+//     $this->assertEquals(0, $mediaCountAfter);
+// }
+
     
 }
