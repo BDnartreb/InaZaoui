@@ -33,6 +33,9 @@ class AccessControlTest extends WebTestCase
         $this->assertResponseStatusCodeSame(constant(Response::class . '::' . $codeHttp));
     }
 
+    /**
+    * @return array<array{string, string, string}>
+    */
     public static function provideAdminAccess(): array
     {
         return [            
@@ -86,5 +89,47 @@ class AccessControlTest extends WebTestCase
         ];
     } 
 
+    public function testAddAlbumWithPostByUnconnectedUser(): void
+    {
+        $postAlbum = "Post Album";
+        $crawler = $this->client->request('POST', '/admin/album/add', [
+            'album' => [
+                'name' => $postAlbum,
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseRedirects('/login');
+        $crawler = $this->client->followRedirect();
+        $this->assertSelectorExists('form input[name="_username"]');
+
+        $album = static::getContainer()->get(\Doctrine\ORM\EntityManagerInterface::class)
+            ->getRepository(\App\Entity\Album::class)
+            ->findOneBy(['name' => $postAlbum]);
+
+        $this->assertNull($album);
+
+    }
+
+    public function testAddAlbumWithPostByConnectedUser(): void
+    {
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => 'user0@zaoui.com']);
+        $this->client->loginUser($user);
+
+        $postAlbum = "Post Album";
+    
+        $this->client->request('POST', '/admin/album/add', [
+            'album' => [
+                'name' => $postAlbum,
+            ]
+        ]);
+    
+        $this->assertResponseStatusCodeSame(403);
+    
+        $album = static::getContainer()->get(\Doctrine\ORM\EntityManagerInterface::class)
+            ->getRepository(\App\Entity\Album::class)
+            ->findOneBy(['name' => $postAlbum]);
+    
+        $this->assertNull($album);
+    }
     
 }

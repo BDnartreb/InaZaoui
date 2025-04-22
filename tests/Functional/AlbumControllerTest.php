@@ -4,6 +4,7 @@ namespace App\Tests\Functional;
 
 use App\Entity\User;
 use App\Entity\Album;
+use App\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,57 +15,52 @@ class AlbumControllerTest extends WebTestCase
     private EntityManagerInterface $em;
     private KernelBrowser $client;
 
-    private string $albumName = 'Album Test';
-    private string $albumModified = 'Album Test Modified';
-
     public function setUp(): void
     {
         $this->client = static::createClient();
         $container = $this->client->getContainer();
         $this->em = $container->get('doctrine')->getManager();
-    }
- 
-    public function testAddAlbum(): void
-    {
-        // Given : /admin/album/add
-        // When : Enter new album name and clic on add button
-        // Then : the album is added to the database 
-        // And : it displays /admin/album with the name modified
-
         $admin = $this->em->getRepository(User::class)->findOneBy(['email' => 'ina@zaoui.com']);
         $this->client->loginUser($admin);
+    }
+ 
+    public function testDisplayAdminAlbumPage(): void
+    {
+        $crawler = $this->client->request('GET', '/admin/album');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('td', "Album 1");
+    }
+
+    public function testAdminAlbumAdd(): void
+    {
+        $albumName = 'Album Test';
         $crawler = $this->client->request('GET', '/admin/album/add');
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('Ajouter')->form([
-            'album[name]' => $this->albumName,
+            'album[name]' => $albumName,
         ]);
         $this->client->submit($form);
         $this->assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
-        $newAlbum = $this->em->getRepository(Album::class)->findOneBy(['name' => $this->albumName]);
+        $newAlbum = $this->em->getRepository(Album::class)->findOneBy(['name' => $albumName]);
         $this->assertNotNull($newAlbum);
-        $this->assertEquals($this->albumName, $newAlbum->getName());
+        $this->assertEquals($albumName, $newAlbum->getName());
     }
 
-    public function testUpdateAlbum(): void
+    public function testAdminAlbumUpdate(): void
     {
-            // Given : /admin/album/update/{id} of the album
-        // When : Modify its name and clic on modify button
-        // Then : the name is changed 
-        // And : Display /admin/album with the name modified
-
-        $admin = $this->em->getRepository(User::class)->findOneBy(['email' => 'ina@zaoui.com']);
-        $this->client->loginUser($admin);
-        $album = $this->em->getRepository(Album::class)->findOneBy(['name' => $this->albumName]);
+        $albumName = 'Album 3';
+        $albumModified = 'Album 3 Modifié';
+        $album = $this->em->getRepository(Album::class)->findOneBy(['name' => $albumName]);
         $albumId = $album->getId();
         $crawler = $this->client->request('GET', '/admin/album/update/' . $albumId);
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('Modifier')->form([
-            'album[name]' => $this->albumModified,
+            'album[name]' => $albumModified,
         ]);
         $this->client->submit($form);
-        $albumUpdated = $this->em->getRepository(Album::class)->findOneBy(['name' => $this->albumModified]);
-        $this->assertEquals($this->albumModified, $albumUpdated->getName());
+        $albumUpdated = $this->em->getRepository(Album::class)->findOneBy(['name' => $albumModified]);
+        $this->assertEquals($albumModified, $albumUpdated->getName());
 
             // // Invalid modification in the database
             // $albumModifiedId = $albumModified->getId();
@@ -78,67 +74,46 @@ class AlbumControllerTest extends WebTestCase
         $this->client->followRedirect();
     }
 
-    public function testDeleteAlbum(): void
+    public function testAdminAlbumDelete(): void
     {
-        // Given : /admin/album/delete/{id} of the album or /admin/album
-        // When : Push Enter button or Clic on delete button
-        // Then : The album is deleted but not the associated medias
-        // And : Display /admin/album without the removed album
+        $albumName = 'Album Deleted';
+        $mediaName = 'Titre albumDeleteMedia20';
 
-        $admin = $this->em->getRepository(User::class)->findOneBy(['email' => 'ina@zaoui.com']);
-        $this->client->loginUser($admin);
-
-        $album = $this->em->getRepository(Album::class)->findOneBy(['name' => $this->albumModified]);
+        $album = $this->em->getRepository(Album::class)->findOneBy(['name' => $albumName]);
         $albumId = $album->getId();
         $crawler = $this->client->request('GET', '/admin/album/delete/' . $albumId);
 
-        $albumDeleted = $this->em->getRepository(Album::class)->findOneBy(['name' => $this->albumModified]);
+        $albumDeleted = $this->em->getRepository(Album::class)->findOneBy(['name' => $albumName]);
+        $mediaAlbumDeleted = $this->em->getRepository(Media::class)->findOneBy(['title' => $mediaName]);
         $this->assertEquals($albumDeleted, null);
+        $this->assertEquals($mediaName, $mediaAlbumDeleted->getTitle());
 
         $this->assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
     }
 
-    public function testAddAlbumWithPostByUnconnectedUser(): void
+    /**
+     * @dataProvider provideRenderData
+     */
+    public function testAdminAlbumRender(string $route, string $buttonName): void
     {
-        $postAlbum = "Post Album";
-        $crawler = $this->client->request('POST', '/admin/album/add', [
-            'album' => [
-                'name' => $postAlbum,
-            ]
-        ]);
-        $this->assertResponseStatusCodeSame(302);
-        $this->assertResponseRedirects('/login');
-        $crawler = $this->client->followRedirect();
-        $this->assertSelectorExists('form input[name="_username"]');
+        $crawler = $this->client->request('GET', $route);
 
-        $album = static::getContainer()->get(\Doctrine\ORM\EntityManagerInterface::class)
-            ->getRepository(\App\Entity\Album::class)
-            ->findOneBy(['name' => $postAlbum]);
-
-        $this->assertNull($album);
-
+        $this->assertResponseIsSuccessful(); // Vérifie le code 200
+        $this->assertSelectorExists('form'); // Vérifie qu'un formulaire est bien présent
+        $this->assertSelectorExists('input'); // Vérifie qu'au moins un champ input est présent
+        $this->assertSelectorTextContains('button', $buttonName); // Adapte selon ton bouton
     }
 
-    public function testAddAlbumWithPostByConnectedUser(): void
+    /**
+    * @return array<array{string, string}>
+    */
+    public function provideRenderData(): array
     {
-        $user = $this->em->getRepository(User::class)->findOneBy(['email' => 'user0@zaoui.com']);
-        $this->client->loginUser($user);
-
-        $postAlbum = "Post Album";
-    
-        $this->client->request('POST', '/admin/album/add', [
-            'album' => [
-                'name' => $postAlbum,
-            ]
-        ]);
-    
-        $this->assertResponseStatusCodeSame(403);
-    
-        $album = static::getContainer()->get(\Doctrine\ORM\EntityManagerInterface::class)
-            ->getRepository(\App\Entity\Album::class)
-            ->findOneBy(['name' => $postAlbum]);
-    
-        $this->assertNull($album);
+        return [
+            ['/admin/album/add', 'Ajouter'],
+            ['/admin/album/update/1', 'Modifier'],
+        ];
     }
+
 }

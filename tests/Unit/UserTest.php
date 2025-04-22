@@ -1,10 +1,12 @@
 <?php
 
+namespace App\Tests\Unit;
+
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UserValidationTest extends KernelTestCase
+class UserTest extends KernelTestCase
 {
     private ValidatorInterface $validator;
 
@@ -17,14 +19,15 @@ class UserValidationTest extends KernelTestCase
     public function testInvalidEmail(): void
     {
         $user = new User();
-        $user->setEmail('pasunemail');
-        $user->setLastName('Z'); // trop court
-        $user->setPassword('xxx'); // peu importe ici
+        $user->setEmail('badEmail');
+        $user->setFirstName('userFirstName');
+        $user->setLastName('');
+        $user->setPassword('xxx');
         $user->setRoles(['ROLE_USER']);
 
         $violations = $this->validator->validate($user);
 
-        $this->assertCount(2, $violations); // Email invalide + lastName trop court
+        $this->assertCount(3, $violations);
 
         $messages = [];
         foreach ($violations as $violation) {
@@ -32,15 +35,16 @@ class UserValidationTest extends KernelTestCase
         }
 
         $this->assertContains("Veuiller entrer un email valide (nom@zaoui.com).", $messages);
-        $this->assertContains("Cette valeur est trop courte. Elle doit avoir au minimum 2 caractères.", $messages);
+        $this->assertContains("Veuillez entrer votre nom.", $messages);
     }
 
     public function testValidUser(): void
     {
         $user = new User();
-        $user->setEmail('user@example.com');
-        $user->setLastName('Dupont');
-        $user->setPassword('hashedpass');
+        $user->setEmail('user@zaoui.com');
+        $user->setFirstName('');
+        $user->setLastName('userLastName');
+        $user->setPassword('password');
         $user->setRoles(['ROLE_ADMIN']);
 
         $violations = $this->validator->validate($user);

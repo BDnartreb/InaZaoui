@@ -8,13 +8,14 @@ use App\Form\UserUpdateType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class GuestController extends AbstractController
 {
-    protected $em;
-    private $userPasswordHasher;
+    protected EntityManagerInterface $em;
+    private UserPasswordHasherInterface $userPasswordHasher;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -26,7 +27,7 @@ final class GuestController extends AbstractController
 
 
     #[Route('/admin/guests', name: 'admin_guests_index')]
-    public function index(EntityManagerInterface $em)
+    public function index(EntityManagerInterface $em): Response
     {
         $allGuests = $em->getRepository(User::class)->findAll();  
         $guests = array_filter($allGuests, function ($user) {
@@ -36,7 +37,7 @@ final class GuestController extends AbstractController
     }
     
     #[Route('/admin/guest/add', name: 'admin_guest_add')]
-    public function add(Request $request)
+    public function add(Request $request): Response
     {
         $guest = new User();
         $form = $this->createForm(UserType::class, $guest);
@@ -53,7 +54,7 @@ final class GuestController extends AbstractController
     }
 
     #[Route('/admin/guest/update/{id}', name: 'admin_guest_update')]
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): Response
     {
         $guest = $this->em->getRepository(User::class)->find($id);
         $form = $this->createForm(UserUpdateType::class, $guest);
@@ -77,7 +78,7 @@ final class GuestController extends AbstractController
 
    
     #[Route('/admin/guest/delete/{id}', name: 'admin_guest_delete')]
-    public function delete(int $id)
+    public function delete(int $id): Response
     {
         $guest = $this->em->getRepository(User::class)->find($id);
         $this->em->remove($guest);

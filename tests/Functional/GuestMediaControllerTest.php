@@ -19,21 +19,41 @@ final class GuestMediaControllerTest extends WebTestCase
         $this->client = static::createClient();
         $container = $this->client->getContainer();
         $this->em = $container->get('doctrine')->getManager();
-        $this->user = $this->em->getRepository(User::class)->findOneBy(['email' => 'userdeletemedias@zaoui.com']);
+        $this->user = $this->em->getRepository(User::class)->findOneBy(['email' => 'userlambda@zaoui.com']);
         $this->client->loginUser($this->user);
     }
 
-    public function testDeleteMedia(): void
+    public function testDisplayGuestMediaPage(): void
     {
-        $newMediaTitle = 'Titre userDeleteMedias 1';
-        $media = $this->em->getRepository(Media::class)->findOneBy(['title' => $newMediaTitle]);
+        $crawler = $this->client->request('GET', '/guest/media');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('th', "Image");
+    }
+
+    /**
+     * @dataProvider provideMediaData
+     */
+    public function testDeleteMedia(?string $MediaTitleBefore, ?string $MediaTitleAfter): void
+    {
+        $media = $this->em->getRepository(Media::class)->findOneBy(['title' => $MediaTitleBefore]);
         $mediaId = $media->getId();
         $crawler = $this->client->request('GET', '/guest/media/delete/' . $mediaId);
 
-        $deletedMedia = $this->em->getRepository(User::class)->find($mediaId);
-        $this->assertEquals($deletedMedia, null);
+        $deletedMedia = $this->em->getRepository(Media::class)->find($mediaId)->getTitle();
+        $this->assertEquals($deletedMedia, $MediaTitleAfter);
 
         $this->assertResponseRedirects('/guest/media');
         $this->client->followRedirect();
+    }
+
+    /**
+    * @return array<array{string, ?string}>
+    */
+    public function provideMediaData(): array
+    {
+        return [
+            ['Titre userLambda 9', null],
+            ['Titre albumDeleteMedia20', 'Titre albumDeleteMedia20'],
+        ];
     }
 }

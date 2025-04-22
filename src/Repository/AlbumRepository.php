@@ -9,10 +9,10 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Album>
  *
- * @method Album|null find($id, $lockMode = null, $lockVersion = null)
- * @method Album|null findOneBy(array $criteria, array $orderBy = null)
- * @method Album[]    findAll()
- * @method Album[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Album|null find(mixed $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Album|null findOneBy(array<string, mixed> $criteria, ?array<string, string> $orderBy = null)
+ * @method list<Album> findAll()
+ * @method list<Album> findBy(array<string, mixed> $criteria, ?array<string, string> $orderBy = null, ?int $limit = null, ?int $offset = null)
  */
 class AlbumRepository extends ServiceEntityRepository
 {

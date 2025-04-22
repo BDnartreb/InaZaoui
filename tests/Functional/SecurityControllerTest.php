@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SecurityControllerTest extends WebTestCase
 {
-    private EntityManagerInterface $em;
+    protected EntityManagerInterface $em;
     private KernelBrowser $client;
 
     public function setUp(): void
@@ -62,7 +62,9 @@ class SecurityControllerTest extends WebTestCase
         $this->client->followRedirect();
     }
 
-
+    /**
+    * @return array<array{string, string}>
+    */
     public function provideBadUser(){
         return [            
             ["baduser@zaoui.com", "password"],

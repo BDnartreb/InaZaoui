@@ -25,7 +25,7 @@ class MediaControllerTest extends WebTestCase
 
     public function testDeleteMedia(): void
     {
-        $newMediaTitle = 'Titre userDeleteMedias 2';
+        $newMediaTitle = 'Titre userLambda 2';
         $media = $this->em->getRepository(Media::class)->findOneBy(['title' => $newMediaTitle]);
         $mediaId = $media->getId();
         $crawler = $this->client->request('GET', '/admin/media/delete/' . $mediaId);

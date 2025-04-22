@@ -3,15 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Media;
+use App\Entity\User;
 use App\Form\MediaType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MediaController extends AbstractController
 {
-    protected $em;
+    protected EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -19,7 +21,7 @@ class MediaController extends AbstractController
     }
     
     #[Route('/admin/media', name: 'admin_media_index')]
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
 
@@ -46,7 +48,7 @@ class MediaController extends AbstractController
     }
 
     #[Route('/admin/media/add', name: 'admin_media_add')]
-    public function add(Request $request)
+    public function add(Request $request): Response
     {
         $media = new Media();
         //$form = $this->createForm(MediaType::class, $media, ['roles' => $this->isGranted('ROLE_ADMIN')]);
@@ -55,7 +57,11 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$this->isGranted('ROLE_ADMIN')) {
-                $media->setUser($this->getUser());
+                $user = $this->getUser();
+                if (!$user instanceof User) {
+                    throw new \LogicException('L\'utilisateur courant n\'est pas une instance de App\Entity\User');
+                }
+                $media->setUser($user);
             }
             $media->setPath('uploads/' . md5(uniqid()) . '.' . $media->getFile()->guessExtension());
             $media->getFile()->move('uploads/', $media->getPath());
@@ -68,7 +74,7 @@ class MediaController extends AbstractController
     }
 
     #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
-    public function delete(int $id)
+    public function delete(int $id): Response
     {
         $media = $this->em->getRepository(Media::class)->find($id);
         if ($media) {
