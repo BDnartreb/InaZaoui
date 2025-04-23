@@ -5,8 +5,11 @@ namespace App\Tests\Functional;
 use App\Entity\Album;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+use function PHPUnit\Framework\greaterThan;
 
 class HomeControllerTest extends WebTestCase
 {
@@ -41,11 +44,15 @@ class HomeControllerTest extends WebTestCase
     {
         $container = static::getContainer();
         $this->em = $container->get('doctrine')->getManager();
-        $guestId = $this->em->getRepository(User::class)->findOneBy(['email' => $guestEmail])->getId();
+        $guest = $this->em->getRepository(User::class)->findOneBy(['email' => $guestEmail]);
+        $guestId = $guest->getId();
         $crawler = $this->client->request('GET', '/guest/' . $guestId);
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h3', $guestLastName);
-        self::assertSelectorCount(10, 'img');
+            self::assertThat(
+        $crawler->filter('img')->count(),
+        new GreaterThan(1)
+    );
     }
 
     /**

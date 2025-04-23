@@ -37,7 +37,7 @@ class SecurityControllerTest extends WebTestCase
 
         $authorizationChecker = self::getContainer()->get(AuthorizationCheckerInterface::class);
         self::assertTrue($authorizationChecker->isGranted('IS_AUTHENTICATED'));
-        $crawler = $this->client->request('GET', '/logout');
+        $crawler = $this->client->request('GET', '/login');
         self::assertFalse($authorizationChecker->isGranted('IS_AUTHENTICATED'));
         $this->assertResponseRedirects('/');
         $this->client->followRedirect();

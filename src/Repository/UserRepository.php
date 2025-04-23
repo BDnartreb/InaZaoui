@@ -32,8 +32,55 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+}
 
-    
+    //    /**
+    //     * @return User[] Returns an array of User objects
+    //     */
+    // public function findGuests(): array
+    // {
+    //     return $this->createQueryBuilder('u')
+    //         //->select('u', 'u.lastName')
+    //         // ->setParameter('role', 'ROLE_USER')
+    // //        ->orderBy('u.id', 'ASC')
+    // //        ->setMaxResults(10)
+    //         ->where('u.roles LIKE :roles')
+    //         ->setParameter('roles', '%ROLE_USER%')
+    //         ->getQuery()
+    //         ->getResult()
+    //         ;
+
+
+
+
+// https://afsy.fr/avent/2013/14-votre-application-est-lente-pensez-a-optimiser-doctrine
+        //     $qb = $this
+        //     ->createQueryBuilder('user')
+        //     ->addSelect('group')
+        //     ->leftJoin('user.groups', 'group')
+        //     ->where(...)
+        // ;
+
+        // return $qb->getQuery()->execute();
+
+// REQUETES NATIVES
+//         // Get connection
+// $conn = $entityManager->getConnection();
+
+// // Get table name
+// $meta = $entityManager->getClassMetadata(User::class);
+// $tableName = $meta->getTableName();
+
+// // Get random ids
+// $sql = "SELECT id AS id FROM $tableName WHERE active = true ORDER BY RAND()";
+// $statement = $conn->executeQuery($sql);
+// $fetchedIds = array_map(function ($element) {
+//     return $element['id'];
+// }, $statement->fetchAll());
+
+// return $fetchedIds;
+
+
 
     //    /**
     //     * @return User[] Returns an array of User objects
@@ -59,4 +106,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //            ->getOneOrNullResult()
     //        ;
     //    }
-}
+

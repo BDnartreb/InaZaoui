@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Album;
 use App\Entity\Media;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,10 +27,10 @@ class HomeController extends AbstractController
     }
 
     #[Route('/guests', name: 'guests')]
-    public function guests(): Response
+    public function guests(UserRepository $userRepository): Response
     {
         $allGuests = $this->em->getRepository(User::class)->findAll();
-
+        
         $guests = array_filter($allGuests, function ($user) {
             $roles = $user->getRoles();
             return !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_FROZEN', $roles);
@@ -65,18 +66,21 @@ class HomeController extends AbstractController
         $album = $id ? $this->em->getRepository(Album::class)->find($id) : null;
         $user = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
-        }
-        
-        $medias = $album
-        ? $this->em->getRepository(Media::class)->findByAlbum($album)
-        : $this->em->getRepository(Media::class)->findByUser($user);
+        if ($user instanceof User) {
+            // throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
+            $medias = $album
+            ? $this->em->getRepository(Media::class)->findByAlbum($album)
+            : $this->em->getRepository(Media::class)->findByUser($user);
 
-        // if user of the media has no role [''], get rid of user's medias
-        $medias = array_filter($medias, function ($media) {
+        // if user is ['ROLE_FROZEN'], do not display his medias
+            $medias = array_filter($medias, function ($media) {
             return !in_array('ROLE_FROZEN', $media->getUser()->getRoles());
-        });
+            });
+        } else {
+            $medias = $album
+            ? $this->em->getRepository(Media::class)->findByAlbum($album)
+            : [];
+        }  
 
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,

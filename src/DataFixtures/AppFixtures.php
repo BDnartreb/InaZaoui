@@ -105,7 +105,7 @@ class AppFixtures extends Fixture
             $media = new Media();
             $media->setUser($userDeleted);
             $media->setAlbum($albums[random_int(0, 2)]);
-            $media->setPath(sprintf('uploads/000' . $i . '.jpg'));
+            $media->setPath(sprintf('uploads/00' . $i . '.jpg'));
             $media->setTitle(sprintf('Titre userDeleted ' . $i));
             $manager->persist($media);
         }
