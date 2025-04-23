@@ -23,15 +23,29 @@ class MediaTest extends KernelTestCase
         $media = new Media();
         $media->setTitle('Test image');
        // $media->setPath('/fake/path.jpg');
-        $media->setPath('/tests/Unit/img-sup_2Mo.jpg');
+        // $media->setPath('/tests/Unit/img-sup_2Mo.jpg');
 
-        // Créer un faux fichier TXT (invalide)
+        // // Créer un faux fichier TXT (invalide)
+        // $file = new UploadedFile(
+        //     __DIR__ . '/img-sup_2Mo.jpg',
+        //     'img-sup_2Mo.jpg',
+        //     null,
+        //     null,
+        //     true // test mode
+        // );
+
+        $tempPath = sys_get_temp_dir() . '/fake_large_image.jpg';
+        file_put_contents($tempPath, str_repeat('0', 2 * 1024 * 1024 + 1));
+
+        
+        $this->assertFileExists($tempPath);
+
         $file = new UploadedFile(
-            __DIR__ . '/img-sup_2Mo.jpg',
-            'img-sup_2Mo.jpg',
+            $tempPath,
+            'fake_large_image.jpg',
+            'image/jpeg',
             null,
-            null,
-            true // test mode
+            true
         );
 
         $media->setFile($file);
@@ -42,5 +56,6 @@ class MediaTest extends KernelTestCase
         $this->assertGreaterThan(0, count($violations));
         $messages = array_map(fn($v) => $v->getMessage(), iterator_to_array($violations));
         $this->assertContains('Le fichier ne peut pas dépasser 2 Mo.', $messages);
+        @unlink($tempPath);
     }
 }
