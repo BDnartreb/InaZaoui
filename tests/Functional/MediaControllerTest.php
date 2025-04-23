@@ -30,7 +30,7 @@ class MediaControllerTest extends WebTestCase
         $mediaId = $media->getId();
         $crawler = $this->client->request('GET', '/admin/media/delete/' . $mediaId);
 
-        $deletedMedia = $this->em->getRepository(User::class)->find($mediaId);
+        $deletedMedia = $this->em->getRepository(Media::class)->find($mediaId);
         $this->assertEquals($deletedMedia, null);
 
         $this->assertResponseRedirects('/admin/media');

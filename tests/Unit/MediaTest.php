@@ -26,7 +26,7 @@ class MediaTest extends KernelTestCase
 
         // Créer un faux fichier TXT (invalide)
         $file = new UploadedFile(
-            __DIR__ . '\img-sup_2Mo.jpg',
+            __DIR__ . '/img-sup_2Mo.jpg',
             'img-sup_2Mo.jpg',
             null,
             null,
