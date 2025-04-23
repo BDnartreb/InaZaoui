@@ -22,7 +22,8 @@ class MediaTest extends KernelTestCase
     {
         $media = new Media();
         $media->setTitle('Test image');
-        $media->setPath('/fake/path.jpg');
+       // $media->setPath('/fake/path.jpg');
+        $media->setPath('/tests/Unit/img-sup_2Mo.jpg');
 
         // Créer un faux fichier TXT (invalide)
         $file = new UploadedFile(
