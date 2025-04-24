@@ -36,38 +36,52 @@ class MediaControllerTest extends WebTestCase
         $this->assertResponseRedirects('/admin/media');
         $this->client->followRedirect();
     }
-
-    // public function testAddMedia(): void
-    // {
-    //     $crawler = $this->client->request('GET', '/admin/media/add');
-    //     $this->assertResponseIsSuccessful();
-    //     //dd($crawler);
-    //     $user = $this->em->getRepository(User::class)->findOneBy(['email' => "user0@zaoui.com"])->getId();
-        
-    //     $filePath = __DIR__.'/public/images/img-inf_2Mo.JPG';
-    //     $uploadedFile = new UploadedFile(
-    //         $filePath,
-    //         'img-sup_2Mo.jpg',
-    //         mime_content_type($filePath),
-    //         null,
-    //         true // important: force le test (true = fichier déjà déplacé)
-    //     );
-
-    //     $form = $crawler->selectButton('Ajouter')->form([
-    //         'media[user]' => $user,
-    //         'media[album]' => "",
-    //         'media[title]' => $this->newMediaTitle,
-    //         'media[file]' => $uploadedFile,
-    //     ]);
-    //     $this->client->submit($form);
-
-    //     $newMedia = $this->em->getRepository(Media::class)->findOneBy(['title' => $this->newMediaTitle]);
-    //     $this->assertNotNull($newMedia);
-    //     $this->assertEquals($this->newMediaTitle, $newMedia->getTitle());
-    //     //$this->assertTrue($this->client->getResponse()->isRedirection());
-    //     $this->assertResponseRedirects('/admin/medias');
-    //     $this->client->followRedirect();
-    // }
-
-
 }
+
+
+// public function testAddMedia(): void
+//         {
+//             $crawler = $this->client->request('GET', '/admin/media/add');
+//             //file_put_contents('form-debug.html', $crawler->html());
+//             $this->assertResponseIsSuccessful();
+            
+//             $userId = $this->em->getRepository(User::class)->findOneBy(['email' => "user0@zaoui.com"])->getId(); 
+
+//             $media = new Media();
+//             $mediaTitle = 'imageTest';
+//             $media->setTitle($mediaTitle);
+                    
+//             $tempPath = sys_get_temp_dir() . '/imageTest.jpg';
+//             file_put_contents($tempPath, str_repeat('0', 2 * 1024 * 1024));
+//             $this->assertFileExists($tempPath);
+
+//             $file = new UploadedFile(
+//                 $tempPath,
+//                 'imageTest.jpg',
+//                 'image/jpeg',
+//                 null,
+//                 true
+//             );
+           
+//             $form = $crawler->selectButton('Ajouter')->form([
+//                 'media[user]' => $userId,
+//                 'media[album]' => "",
+//                 'media[title]' => $mediaTitle,
+//                 'media[file]' => $file,
+//             ]);
+//             //dd($form->getValues());
+//             $this->client->submit($form);
+//             //$this->assertResponseStatusCodeSame(302);
+//             //$html = $this->client->getResponse()->getContent();
+//             //file_put_contents('debug.html', $html);
+
+//             $newMedia = $this->em->getRepository(Media::class)->findOneBy(['title' => $mediaTitle]);
+//             //$newMedia = $this->em->getRepository(Media::class)->findOneBy(['path' => $tempPath]);
+//             dd($newMedia);
+            
+//             $this->assertNotNull($newMedia);
+//             $this->assertEquals($mediaTitle, $newMedia->getTitle());
+//             //$this->assertTrue($this->client->getResponse()->isRedirection());
+//             $this->assertResponseRedirects('/admin/medias');
+//             $this->client->followRedirect();
+//         }

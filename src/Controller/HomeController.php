@@ -29,8 +29,8 @@ class HomeController extends AbstractController
     #[Route('/guests', name: 'guests')]
     public function guests(UserRepository $userRepository): Response
     {
-        $allGuests = $this->em->getRepository(User::class)->findAll();
-        
+        //$allGuests = $this->em->getRepository(User::class)->findAll();
+        $allGuests = $userRepository->findAllWithMedias();
         $guests = array_filter($allGuests, function ($user) {
             $roles = $user->getRoles();
             return !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_FROZEN', $roles);

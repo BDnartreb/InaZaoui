@@ -59,33 +59,4 @@ final class GuestMediaControllerTest extends WebTestCase
         $this->client->followRedirect();
     }
 
-
-
-
-    // /**
-    //  * @dataProvider provideMediaData
-    //  */
-    // public function testDeleteMedia(?string $MediaTitleBefore, ?string $MediaTitleAfter): void
-    // {
-    //     $media = $this->em->getRepository(Media::class)->findOneBy(['title' => $MediaTitleBefore]);
-    //     $mediaId = $media->getId();
-    //     $crawler = $this->client->request('GET', '/guest/media/delete/' . $mediaId);
-
-    //     $deletedMedia = $this->em->getRepository(Media::class)->find($mediaId)->getTitle();
-    //     $this->assertEquals($deletedMedia, $MediaTitleAfter);
-
-    //     $this->assertResponseRedirects('/guest/media');
-    //     $this->client->followRedirect();
-    // }
-
-    // /**
-    // * @return array<array{string, ?string}>
-    // */
-    // public function provideMediaData(): array
-    // {
-    //     return [
-    //         ['Titre userLambda 9', null],
-    //         ['Titre albumDeleteMedia20', 'Titre albumDeleteMedia20'],
-    //     ];
-    // }
 }

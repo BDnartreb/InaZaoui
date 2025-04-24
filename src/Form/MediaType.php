@@ -55,7 +55,6 @@ class MediaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Media::class,
-            //'is_admin' => false,
         ]);
     }
 }

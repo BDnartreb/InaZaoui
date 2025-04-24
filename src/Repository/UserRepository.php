@@ -32,23 +32,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    public function findAllWithMedias(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.medias', 'm')
+            ->addSelect('m')
+            ->getQuery()
+            ->getResult();
+    }
 }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    // public function findGuests(): array
-    // {
-    //     return $this->createQueryBuilder('u')
-    //         //->select('u', 'u.lastName')
-    //         // ->setParameter('role', 'ROLE_USER')
-    // //        ->orderBy('u.id', 'ASC')
-    // //        ->setMaxResults(10)
-    //         ->where('u.roles LIKE :roles')
-    //         ->setParameter('roles', '%ROLE_USER%')
-    //         ->getQuery()
-    //         ->getResult()
-    //         ;
 
 
 
