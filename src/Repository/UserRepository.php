@@ -33,6 +33,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    /**
+    * @return User[]
+    */
     public function findAllWithMedias(): array
     {
         return $this->createQueryBuilder('u')
