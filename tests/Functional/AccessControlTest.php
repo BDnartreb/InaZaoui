@@ -60,7 +60,7 @@ class AccessControlTest extends WebTestCase
         }
 
         if ($path === "/guest/media/delete/idbis"){
-            $mediaId = $this->em->getRepository(Media::class)->findOneBy(['title' => 'Titre 42'])->getId();
+            $mediaId = $this->em->getRepository(Media::class)->findOneBy(['title' => 'Titre userLambda 3'])->getId();
             $path = "/guest/media/delete/" . $mediaId;
         }
         
