@@ -50,6 +50,10 @@ ROLE_FROZEN : userfrozen@zaoui.com
 #
 IMPLEMENTATIONS DE LA VERSION 2025
 
+Le site a été upgradé de la version 5.4 à la version 6.4 de Symfony
+Il est développé dans la version php 8.2.12
+Les données sont stockée sur une base de données postgreSQL version 17
+
 Entity User :
     Modification pour :
         Authentification depuis une base de données

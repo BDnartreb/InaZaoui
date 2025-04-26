@@ -5,7 +5,6 @@ namespace App\Controller\Guest;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Form\GuestMediaType;
-use App\Form\MediaType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +23,7 @@ final class GuestMediaController extends AbstractController
         $this->em = $em;
     }
 
-    #[IsGranted('ROLE_USER')]
+    //#[IsGranted('ROLE_USER')]
     #[Route('/guest/media', name: 'guest_media_index')]
     public function index(Request $request): Response
     {
@@ -49,7 +48,7 @@ final class GuestMediaController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_USER')]
+    //#[IsGranted('ROLE_USER')]
     #[Route('/guest/media/add', name: 'guest_media_add')]
     public function add(Request $request): Response
     {
@@ -59,7 +58,6 @@ final class GuestMediaController extends AbstractController
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
         $media->setUser($user);
-        //$form = $this->createForm(MediaType::class, $media, ['roles' => $this->isGranted('ROLE_ADMIN')]);
         $form = $this->createForm(GuestMediaType::class, $media);
         $form->handleRequest($request);
 

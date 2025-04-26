@@ -58,11 +58,6 @@ jobs:
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
       run: php bin/console doctrine:fixtures:load --no-interaction
-
-    - name: Debug loaded data
-      run: php bin/console doctrine:query:sql "SELECT * FROM user"
-      env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
     
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:

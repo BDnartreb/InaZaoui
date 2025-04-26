@@ -69,7 +69,7 @@ class HomeControllerTest extends WebTestCase
     * 
     * @dataProvider provideFrozenGuest
     */
-    public function testShouldNotDisplayGuestPageToRoleFrozen(string $guestEmail): void
+    public function testShouldNotDisplayGuestPageOfRoleFrozen(string $guestEmail): void
     {
         $container = static::getContainer();
         $this->em = $container->get('doctrine')->getManager();

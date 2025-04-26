@@ -62,14 +62,6 @@ class AlbumControllerTest extends WebTestCase
         $albumUpdated = $this->em->getRepository(Album::class)->findOneBy(['name' => $albumModified]);
         $this->assertEquals($albumModified, $albumUpdated->getName());
 
-            // // Invalid modification in the database
-            // $albumModifiedId = $albumModified->getId();
-            // $crawler = $this->client->request('GET', '/admin/album/update/' . $albumModifiedId);
-            // $form = $crawler->selectButton('Modifier')->form([
-            //     'album[name]' => 'Album 1',
-            // ]);
-            // $this->client->submit($form);
-
         $this->assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
     }
@@ -99,10 +91,10 @@ class AlbumControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', $route);
 
-        $this->assertResponseIsSuccessful(); // Vérifie le code 200
-        $this->assertSelectorExists('form'); // Vérifie qu'un formulaire est bien présent
-        $this->assertSelectorExists('input'); // Vérifie qu'au moins un champ input est présent
-        $this->assertSelectorTextContains('button', $buttonName); // Adapte selon ton bouton
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('form');
+        $this->assertSelectorExists('input');
+        $this->assertSelectorTextContains('button', $buttonName);
     }
 
     /**

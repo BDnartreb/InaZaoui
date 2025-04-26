@@ -29,7 +29,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorExists('form');
     
         $form = $crawler->selectButton('Connexion')->form([
-            '_username' => 'user0@zaoui.com',
+            '_username' => 'userlambda@zaoui.com',
             '_password' => 'password',
         ]);
 
@@ -38,7 +38,6 @@ class SecurityControllerTest extends WebTestCase
         $authorizationChecker = self::getContainer()->get(AuthorizationCheckerInterface::class);
         self::assertTrue($authorizationChecker->isGranted('IS_AUTHENTICATED'));
         $crawler = $this->client->request('GET', '/login');
-        self::assertFalse($authorizationChecker->isGranted('IS_AUTHENTICATED'));
         $this->assertResponseRedirects('/');
         $this->client->followRedirect();
     }

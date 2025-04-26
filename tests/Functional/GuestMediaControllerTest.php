@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class GuestMediaControllerTest extends WebTestCase
 {
@@ -28,6 +29,16 @@ final class GuestMediaControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/guest/media');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('th', "Image");
+    }
+
+    public function testDisplayMediaAddPage(): void
+    {
+        $crawler = $this->client->request('GET', '/guest/media/add');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('form');
+        $this->assertSelectorExists('input');
+        $this->assertSelectorTextContains('button', 'Ajouter');
     }
 
     public function testGuestDeleteHisMedia(): void
@@ -55,6 +66,42 @@ final class GuestMediaControllerTest extends WebTestCase
         $deletedMedia = $this->em->getRepository(Media::class)->find($mediaId)->getTitle();
         $this->assertEquals($deletedMedia, $MediaTitle);
 
+        $this->assertResponseRedirects('/guest/media');
+        $this->client->followRedirect();
+    }
+
+    public function testGuestAddMedia(): void
+    {
+        $crawler = $this->client->request('GET', '/guest/media/add');
+        $this->assertResponseIsSuccessful();
+        
+        //$userId = $this->em->getRepository(User::class)->findOneBy(['email' => "user0@zaoui.com"])->getId(); 
+
+        $media = new Media();
+        $mediaTitle = 'imageTestGuest.jpg';
+        $media->setTitle($mediaTitle);
+
+        $tempPath =   __DIR__.'/../Unit/img-inf_2Mo.JPG';
+        $this->assertFileExists($tempPath);
+
+       $file = new UploadedFile(
+            $tempPath,
+            'imageTest.jpg',
+            'image/jpeg',
+            null,
+            true
+        );
+
+        $form = $crawler->selectButton('Ajouter')->form([
+            'guest_media[title]' => $mediaTitle,
+            'guest_media[file]' => $file,
+        ]);
+
+        $this->client->submit($form);
+
+        $newMedia = $this->em->getRepository(Media::class)->findOneBy(['title' => $mediaTitle]);
+        $this->assertNotNull($newMedia);
+        $this->assertEquals($mediaTitle, $newMedia->getTitle());
         $this->assertResponseRedirects('/guest/media');
         $this->client->followRedirect();
     }
