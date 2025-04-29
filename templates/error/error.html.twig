@@ -1,0 +1,21 @@
+{% extends 'front.html.twig' %}
+
+
+{% block title %}Erreur{% endblock %}
+
+
+{% block front %}
+    <h1>Une erreur de code {{ code }} est survenue </h1>
+
+    {% if message %}
+        {% if code == 404 %}
+            <p><strong>Message :</strong> La page que vous demandez n'a pas été trouvée.</p>
+        {% endif %}
+        {% if code == 403 %}
+            <p><strong>Message :</strong> Vous n'êtes pas autorisé à accéder à cette page.</p>
+        {% endif %}
+            <p>{{ message }}</p>
+    {% else %}
+        <p>Une erreur inattendue s'est produite.</p>
+    {% endif %}
+{% endblock %}

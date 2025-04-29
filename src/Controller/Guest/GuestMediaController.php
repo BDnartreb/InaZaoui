@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use function PHPUnit\Framework\throwException;
 
@@ -23,7 +22,6 @@ final class GuestMediaController extends AbstractController
         $this->em = $em;
     }
 
-    //#[IsGranted('ROLE_USER')]
     #[Route('/guest/media', name: 'guest_media_index')]
     public function index(Request $request): Response
     {
@@ -48,7 +46,6 @@ final class GuestMediaController extends AbstractController
         ]);
     }
 
-    //#[IsGranted('ROLE_USER')]
     #[Route('/guest/media/add', name: 'guest_media_add')]
     public function add(Request $request): Response
     {

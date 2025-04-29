@@ -51,7 +51,7 @@ class HomeController extends AbstractController
         }
 
         // if (in_array('ROLE_FROZEN', $guest->getRoles())) {
-        //     throw $this->createAccessDeniedException('Cet utilisateur est gelé et ne peut pas accéder à cette page.');
+        //     throw $this->createAccessDeniedException('Vous n'êtes pas autorisé à accéder à cette page.');
         // }
 
         return $this->render('front/guest.html.twig', [
