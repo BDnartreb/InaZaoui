@@ -51,7 +51,6 @@ class MediaController extends AbstractController
     public function add(Request $request): Response
     {
         $media = new Media();
-        //$form = $this->createForm(MediaType::class, $media, ['roles' => $this->isGranted('ROLE_ADMIN')]);
         $form = $this->createForm(MediaType::class, $media);
         $form->handleRequest($request);
 

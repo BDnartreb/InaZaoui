@@ -60,7 +60,6 @@ class MediaControllerTest extends WebTestCase
    
             $newMedia = $this->em->getRepository(Media::class)->findOneBy(['title' => $mediaTitle]);
             //$newMedia = $this->em->getRepository(Media::class)->findOneBy(['path' => $tempPath]);
-            //dd($newMedia);
             
             $this->assertNotNull($newMedia);
             $this->assertEquals($mediaTitle, $newMedia->getTitle());

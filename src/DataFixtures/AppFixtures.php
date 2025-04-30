@@ -30,6 +30,7 @@ class AppFixtures extends Fixture
         $admin->setLastName('Zaoui');
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setPassword($this->userPasswordHasher->hashPassword($admin, 'password'));
+        $admin->setDescription('Je suis Ina Zaoui');
         $manager->persist($admin);
 
         // user with medias for delete user test with medias in cascade
@@ -39,6 +40,7 @@ class AppFixtures extends Fixture
         $userLambda->setLastName('userlambdaLastName');
         $userLambda->setRoles(['ROLE_USER']);
         $userLambda->setPassword($this->userPasswordHasher->hashPassword($userLambda, 'password'));
+        $userLambda->setDescription('Je suis le user lambda et je suis fier de représenter Monsieur tout le monde');
         $manager->persist($userLambda);
 
         // user with medias for delete user test with medias in cascade
@@ -48,6 +50,7 @@ class AppFixtures extends Fixture
         $userDeleted->setLastName('userdeletedLastName');
         $userDeleted->setRoles(['ROLE_USER']);
         $userDeleted->setPassword($this->userPasswordHasher->hashPassword($userDeleted, 'password'));
+        $userDeleted->setDescription('Je suis le user delete et je suis destiné à être supprimé. Snif!');
         $manager->persist($userDeleted);
 
         // user with medias but no ROLE_USER
@@ -57,6 +60,7 @@ class AppFixtures extends Fixture
         $userFrozen->setLastName('userfrozenLastName');
         $userFrozen->setRoles(['ROLE_FROZEN']);
         $userFrozen->setPassword($this->userPasswordHasher->hashPassword($userFrozen, 'password'));
+        $userFrozen->setDescription('Je suis le user frozen et je suis temporairement indésirable sur ce site.');
         $manager->persist($userFrozen);
 
         // standard users 
@@ -68,6 +72,7 @@ class AppFixtures extends Fixture
             $user->setDescription(sprintf('Description' . $i));
             $user->setRoles(['ROLE_USER']);
             $user->setPassword($this->userPasswordHasher->hashPassword($admin, 'password'));
+            $user->setDescription('Je suis un user standard.');
             $manager->persist($user);
             $users[] = $user;
         }

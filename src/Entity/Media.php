@@ -15,7 +15,6 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
-    //#[ORM\ManyToOne(targetEntity: Album::class, fetch: "EAGER", orphanRemoval: true)]
     #[ORM\ManyToOne(targetEntity: Album::class, fetch: "EAGER")]
     private ?Album $album = null;
 

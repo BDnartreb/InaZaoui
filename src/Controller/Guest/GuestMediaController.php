@@ -74,7 +74,6 @@ final class GuestMediaController extends AbstractController
     {
         $media = $this->em->getRepository(Media::class)->find($id);
         $connectedUser = $this->getUser();
-        //dd($connectedUser);
         $user = $media->getUser();
         //dd($user);
 

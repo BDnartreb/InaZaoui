@@ -46,13 +46,8 @@ class HomeController extends AbstractController
     {
         $guest = $this->em->getRepository(User::class)->find($id);
         if (in_array('ROLE_FROZEN', $guest->getRoles())){
-            $this->addFlash('error', 'Accès refusé');
             return $this->redirectToRoute('guests');
         }
-
-        // if (in_array('ROLE_FROZEN', $guest->getRoles())) {
-        //     throw $this->createAccessDeniedException('Vous n'êtes pas autorisé à accéder à cette page.');
-        // }
 
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
